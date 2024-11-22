@@ -8,13 +8,13 @@ public class Ghost : MonoBehaviour
     public Piece trackingPiece;
 
     public Tilemap tilemap { get; private set; }
-    public Vector3Int[] cells { get; private set; }
-    public Vector3Int position { get; private set; }
+    public Vector2Int[] cells { get; private set; }
+    public Vector2Int position { get; private set; }
 
     private void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
-        cells = new Vector3Int[4];
+        cells = new Vector2Int[4];
     }
 
     private void LateUpdate()
@@ -29,8 +29,8 @@ public class Ghost : MonoBehaviour
     {
         foreach (var t in cells)
         {
-            Vector3Int tilePosition = t + position;
-            tilemap.SetTile(tilePosition, null);
+            Vector2Int tilePosition = t + position;
+            tilemap.SetTile((Vector3Int)tilePosition, null);
         }
     }
 
@@ -38,13 +38,13 @@ public class Ghost : MonoBehaviour
     {
         for (int i = 0; i < cells.Length; i++)
         {
-            cells[i] = trackingPiece.cells[i];
+            cells[i] = trackingPiece.Cells[i];
         }
     }
 
     private void Drop()
     {
-        Vector3Int position = trackingPiece.position;
+        Vector2Int position = trackingPiece.Position;
 
         int current = position.y;
         int bottom = -mainBoard.boardSize.y / 2 - 1;
@@ -72,8 +72,8 @@ public class Ghost : MonoBehaviour
     {
         foreach (var t in cells)
         {
-            Vector3Int tilePosition = t + position;
-            tilemap.SetTile(tilePosition, tile);
+            Vector2Int tilePosition = t + position;
+            tilemap.SetTile((Vector3Int)tilePosition, tile);
         }
     }
 
