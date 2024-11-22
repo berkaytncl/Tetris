@@ -8,6 +8,7 @@ public class Board : MonoBehaviour
     [SerializeField]
     private Tilemap tilemap;
 
+    [SerializeField]
     private Piece _activePiece;
 
     public TetrominoData[] tetrominoes;
@@ -21,12 +22,6 @@ public class Board : MonoBehaviour
             Vector2Int position = new Vector2Int(-boardSize.x / 2, -boardSize.y / 2);
             return new RectInt(position, boardSize);
         }
-    }
-
-    private void Awake()
-    {
-        tilemap = GetComponentInChildren<Tilemap>();
-        _activePiece = GetComponentInChildren<Piece>();
     }
 
     private void Start()
