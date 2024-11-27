@@ -1,5 +1,7 @@
+using BoardManagementModule;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Zenject;
 
 public class Piece : MonoBehaviour
 {
@@ -7,8 +9,9 @@ public class Piece : MonoBehaviour
     
     private Vector2Int[,] _wallKicks;
     
-    public Vector2Int[] Cells =>_cells;
+    public Vector2Int[] Cells => _cells;
 
+    [Inject]
     private Board _board;
     
     public Vector2Int Position { get; private set; }
@@ -17,9 +20,9 @@ public class Piece : MonoBehaviour
 
     private int _rotationIndex;
 
-    public float stepDelay = 1f;
-    public float moveDelay = 0.1f;
-    public float lockDelay = 0.5f;
+    private const float STEP_DELAY = 1f;
+    private const float MOVE_DELAY = 0.1f;
+    private const float LOCK_DELAY = 0.5f;
 
     private float _stepTime;
     private float _moveTime;
@@ -34,14 +37,13 @@ public class Piece : MonoBehaviour
         _tetrominoData = tetrominoData;
 
         _rotationIndex = 0;
-        _stepTime = Time.time + stepDelay;
-        _moveTime = Time.time + moveDelay;
+        _stepTime = Time.time + STEP_DELAY;
+        _moveTime = Time.time + MOVE_DELAY;
         _lockTime = 0f;
         
         _cells = BoardData.Cells[tetrominoData.tetrominoType];
         //_wallKicks = new Vector2Int[3,1];
         _wallKicks = BoardData.WallKicks[tetrominoData.tetrominoType];
-
     }
 
     private void Update()
@@ -83,7 +85,7 @@ public class Piece : MonoBehaviour
         {
             if (Move(Vector2Int.down))
             {
-                _stepTime = Time.time + stepDelay;
+                _stepTime = Time.time + STEP_DELAY;
             }
         }
 
@@ -99,11 +101,11 @@ public class Piece : MonoBehaviour
 
     private void Step()
     {
-        _stepTime = Time.time + stepDelay;
+        _stepTime = Time.time + STEP_DELAY;
 
         Move(Vector2Int.down);
 
-        if (_lockTime >= lockDelay)
+        if (_lockTime >= LOCK_DELAY)
         {
             Lock();
         }
@@ -134,7 +136,7 @@ public class Piece : MonoBehaviour
         if (valid)
         {
             Position = newPosition;
-            _moveTime = Time.time + moveDelay;
+            _moveTime = Time.time + MOVE_DELAY;
             _lockTime = 0f;
         }
 

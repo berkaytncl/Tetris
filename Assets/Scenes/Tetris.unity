@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 443133351}
   - component: {fileID: 443133350}
   - component: {fileID: 443133349}
+  - component: {fileID: 443133353}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -291,6 +292,7 @@ MonoBehaviour:
   _scriptableObjectInstallers: []
   _monoInstallers:
   - {fileID: 443133349}
+  - {fileID: 443133353}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -323,6 +325,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &443133353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443133348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9836666543a42b09c08983683f194f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _boardTilemap: {fileID: 1105188578}
+  _ghostTilemap: {fileID: 319682634}
+  _trackingPiece: {fileID: 1041762771}
+  _tetrominoes:
+  - tile: {fileID: 11400000, guid: c3506d819068644499458905966b7956, type: 2}
+    tetrominoType: 0
+  - tile: {fileID: 11400000, guid: 432b37356a5e4487ab1131e9914bc396, type: 2}
+    tetrominoType: 3
+  - tile: {fileID: 11400000, guid: e83f47c3e44cc413c8e90869155006a8, type: 2}
+    tetrominoType: 5
+  - tile: {fileID: 11400000, guid: 8e88b1391ea464e48b008561373eaf10, type: 2}
+    tetrominoType: 1
+  - tile: {fileID: 11400000, guid: 807b4fdd5ef4b4fccb6a529a586d85d2, type: 2}
+    tetrominoType: 2
+  - tile: {fileID: 11400000, guid: 22010bdb2249a43a0b906e59f72e5727, type: 2}
+    tetrominoType: 4
+  - tile: {fileID: 11400000, guid: 186d98b8a0fc74b08b9562134a8ab594, type: 2}
+    tetrominoType: 6
+  _ghostTile: {fileID: 11400000, guid: 9ad96ddeac7df479eac7dcdd19a1f8d9, type: 2}
 --- !u!1 &450315031
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,9 +414,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39bb4bbce119401cbc85c36fa89dafd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: 9ad96ddeac7df479eac7dcdd19a1f8d9, type: 2}
-  mainBoard: {fileID: 1041762772}
-  trackingPiece: {fileID: 1041762771}
 --- !u!1 &503980099
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,7 +729,7 @@ GameObject:
   - component: {fileID: 559375897}
   - component: {fileID: 559375896}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Pause Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -775,15 +805,15 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 559375894}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -15.348682}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 503980100}
   - {fileID: 1628911306}
   - {fileID: 524440879}
-  m_Father: {fileID: 1424098550}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -961,7 +991,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1041762770}
   - component: {fileID: 1041762769}
-  - component: {fileID: 1041762772}
   - component: {fileID: 1041762771}
   m_Layer: 0
   m_Name: Board
@@ -1010,40 +1039,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 690bfc2f9e44a4f4ba5ecbba9779a97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepDelay: 1
-  moveDelay: 0.1
-  lockDelay: 0.5
---- !u!114 &1041762772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1041762768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fee49e9b85949f5999faf75d612b32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tilemap: {fileID: 1105188578}
-  _activePiece: {fileID: 1041762771}
-  tetrominoes:
-  - tile: {fileID: 11400000, guid: c3506d819068644499458905966b7956, type: 2}
-    tetrominoType: 0
-  - tile: {fileID: 11400000, guid: 432b37356a5e4487ab1131e9914bc396, type: 2}
-    tetrominoType: 3
-  - tile: {fileID: 11400000, guid: e83f47c3e44cc413c8e90869155006a8, type: 2}
-    tetrominoType: 5
-  - tile: {fileID: 11400000, guid: 8e88b1391ea464e48b008561373eaf10, type: 2}
-    tetrominoType: 1
-  - tile: {fileID: 11400000, guid: 807b4fdd5ef4b4fccb6a529a586d85d2, type: 2}
-    tetrominoType: 2
-  - tile: {fileID: 11400000, guid: 22010bdb2249a43a0b906e59f72e5727, type: 2}
-    tetrominoType: 4
-  - tile: {fileID: 11400000, guid: 186d98b8a0fc74b08b9562134a8ab594, type: 2}
-    tetrominoType: 6
-  boardSize: {x: 10, y: 20}
-  spawnPosition: {x: -1, y: 8}
 --- !u!1 &1105188575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,52 +1159,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1424098548
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1424098550}
-  - component: {fileID: 1424098549}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1424098549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424098548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a967962766d34885bbccf48718e8332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 559375894}
---- !u!4 &1424098550
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424098548}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 710.1346, y: 413.65445, z: -15.348682}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 559375899}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1487206608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,5 +1772,5 @@ SceneRoots:
   - {fileID: 450315033}
   - {fileID: 1041762770}
   - {fileID: 1791783923}
-  - {fileID: 1424098550}
+  - {fileID: 559375899}
   - {fileID: 744034979}
