@@ -5,14 +5,14 @@ using Zenject;
 
 public class Piece : MonoBehaviour
 {
+    [Inject]
+    private Board _board;
+    
     private Vector2Int[] _cells;
     
     private Vector2Int[,] _wallKicks;
     
     public Vector2Int[] Cells => _cells;
-
-    [Inject]
-    private Board _board;
     
     public Vector2Int Position { get; private set; }
 
@@ -42,7 +42,6 @@ public class Piece : MonoBehaviour
         _lockTime = 0f;
         
         _cells = BoardData.Cells[tetrominoData.tetrominoType];
-        //_wallKicks = new Vector2Int[3,1];
         _wallKicks = BoardData.WallKicks[tetrominoData.tetrominoType];
     }
 

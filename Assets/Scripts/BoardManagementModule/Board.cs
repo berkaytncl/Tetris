@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
-using Zenject;
 using Random = UnityEngine.Random;
 
 namespace BoardManagementModule
@@ -35,6 +34,11 @@ namespace BoardManagementModule
             _tetrominoes = tetrominoes;
         
             SpawnPiece();
+        }
+
+        public Piece GetPiece()
+        {
+            return _activePiece;
         }
     
         public void SpawnPiece()

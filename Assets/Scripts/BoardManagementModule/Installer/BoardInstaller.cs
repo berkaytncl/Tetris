@@ -8,17 +8,12 @@ namespace BoardManagementModule.Installer
     {
         [SerializeField]
         private Tilemap _boardTilemap;
-        [SerializeField]
-        private Tilemap _ghostTilemap;
 
         [SerializeField]
         private Piece _trackingPiece;
         
         [SerializeField]
         private TetrominoData[] _tetrominoes;
-    
-        [SerializeField]
-        private Tile _ghostTile;
 
         public override void InstallBindings()
         {
@@ -26,10 +21,6 @@ namespace BoardManagementModule.Installer
             {
                 _boardTilemap, _trackingPiece, _tetrominoes
             }).NonLazy();
-            
-            Container.Bind<Ghost>().AsSingle().WithArguments(
-                _ghostTilemap, _ghostTile, _trackingPiece
-            ).NonLazy();
         }
     }
 }

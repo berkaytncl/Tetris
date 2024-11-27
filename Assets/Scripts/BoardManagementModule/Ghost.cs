@@ -5,29 +5,25 @@ using Zenject;
 
 public class Ghost : MonoBehaviour
 {
+    [Inject]
     private Board _board;
     
+    [SerializeField]
     private Tilemap _tilemap;
     
-    private Tile _tile;
-    
-    private Piece _trackingPiece;
-    
-    public Vector2Int[] cells { get; private set; }
-    public Vector2Int position { get; private set; }
+    [SerializeField]
+    private Tile _ghostTile;
 
-    [Inject]
-    public void ZenjectSetup(Board board, Tilemap tilemap, Tile tile, Piece piece)
-    {
-        _board = board;
-        _tilemap = tilemap;
-        _tile = tile;
-        _trackingPiece = piece;
-    }
+    private Piece _piece;
+
+    private Vector2Int[] _cells;
+    
+    private Vector2Int _position;
     
     private void Awake()
     {
-        cells = new Vector2Int[4];
+        _cells = new Vector2Int[4];
+        _piece = _board.GetPiece();
     }
 
     private void LateUpdate()
@@ -40,37 +36,37 @@ public class Ghost : MonoBehaviour
 
     private void Clear()
     {
-        foreach (var t in cells)
+        foreach (var t in _cells)
         {
-            Vector2Int tilePosition = t + position;
+            Vector2Int tilePosition = t + _position;
             _tilemap.SetTile((Vector3Int)tilePosition, null);
         }
     }
 
     private void Copy()
     {
-        for (int i = 0; i < cells.Length; i++)
+        for (int i = 0; i < _cells.Length; i++)
         {
-            cells[i] = _trackingPiece.Cells[i];
+            _cells[i] = _piece.Cells[i];
         }
     }
 
     private void Drop()
     {
-        Vector2Int position = _trackingPiece.Position;
+        Vector2Int position = _piece.Position;
 
         int current = position.y;
         int bottom = -_board.boardSize.y / 2 - 1;
 
-        _board.Clear(_trackingPiece);
+        _board.Clear(_piece);
 
         for (int row = current; row >= bottom; row--)
         {
             position.y = row;
 
-            if (_board.IsValidPosition(_trackingPiece, position))
+            if (_board.IsValidPosition(_piece, position))
             {
-                this.position = position;
+                _position = position;
             }
             else
             {
@@ -78,15 +74,15 @@ public class Ghost : MonoBehaviour
             }
         }
 
-        _board.Set(_trackingPiece);
+        _board.Set(_piece);
     }
 
     private void Set()
     {
-        foreach (var t in cells)
+        foreach (var t in _cells)
         {
-            Vector2Int tilePosition = t + position;
-            _tilemap.SetTile((Vector3Int)tilePosition, _tile);
+            Vector2Int tilePosition = t + _position;
+            _tilemap.SetTile((Vector3Int)tilePosition, _ghostTile);
         }
     }
 }
