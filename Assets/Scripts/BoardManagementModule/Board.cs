@@ -105,30 +105,20 @@ namespace BoardManagementModule
 
         public void ClearLines()
         {
-            RectInt bounds = Bounds;
-            int row = bounds.yMin;
-
-            while (row < bounds.yMax)
+            for (int index = -10; index < 10; index++)
             {
-                if (IsLineFull(row)) 
+                if (IsLineFull(index))
                 {
-                    LineClear(row);
-                }
-                else
-                {
-                    row++;
+                    LineClear(index);
                 }
             }
         }
 
         private bool IsLineFull(int row)
         {
-            RectInt bounds = Bounds;
-
-            for (int col = bounds.xMin; col < bounds.xMax; col++)
+            for (int col = -5; col < 5; col++)
             {
                 Vector2Int position = new Vector2Int(col, row);
-
                 if (!_tilemap.HasTile(position))
                 {
                     return false;
@@ -140,26 +130,22 @@ namespace BoardManagementModule
 
         private void LineClear(int row)
         {
-            RectInt bounds = Bounds;
-
-            for (int col = bounds.xMin; col < bounds.xMax; col++)
+            for (int col = -5; col < 5; col++)
             {
                 Vector2Int position = new Vector2Int(col, row);
                 _tilemap.SetTile(position, null);
             }
 
-            while (row < bounds.yMax)
+            for (int rowIndex = row; rowIndex < 10; rowIndex++)
             {
-                for (int col = bounds.xMin; col < bounds.xMax; col++)
+                for (int colIndex = -5; colIndex < 5; colIndex++)
                 {
-                    Vector2Int position = new Vector2Int(col, row + 1);
+                    Vector2Int position = new Vector2Int(colIndex, rowIndex + 1);
                     TileBase above = _tilemap.GetTile(position);
 
-                    position = new Vector2Int(col, row);
+                    position = new Vector2Int(colIndex, rowIndex);
                     _tilemap.SetTile(position, above);
                 }
-
-                row++;
             }
         }
     }
