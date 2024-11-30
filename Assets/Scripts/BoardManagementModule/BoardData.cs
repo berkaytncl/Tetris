@@ -41,7 +41,7 @@ public static class BoardData
         { new Vector2Int(0, 0), new Vector2Int(-1, 0), new Vector2Int(-1,-1), new Vector2Int(0, 2), new Vector2Int(-1, 2) },
         { new Vector2Int(0, 0), new Vector2Int( 1, 0), new Vector2Int( 1, 1), new Vector2Int(0,-2), new Vector2Int( 1,-2) },
     };
-
+    
     public static readonly Dictionary<TetrominoType, Vector2Int[,]> WallKicks = new Dictionary<TetrominoType, Vector2Int[,]>()
     {
         { TetrominoType.I, WallKicksI },

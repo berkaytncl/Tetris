@@ -7,23 +7,22 @@ namespace BoardManagementModule
 {
     public class Board
     {
+        public readonly Vector2Int BOARD_SIZE = new Vector2Int(10, 20);
+
         private readonly Tilemap _tilemap;
 
         private readonly Piece _activePiece;
     
         private readonly TetrominoData[] _tetrominoes;
-    
-        [HideInInspector]
-        public Vector2Int boardSize = new Vector2Int(10, 20);
-        [HideInInspector]
-        public Vector2Int spawnPosition = new Vector2Int(-1, 8);
+        
+        private readonly Vector2Int _spawnPosition = new Vector2Int(-1, 8);
     
         private RectInt Bounds
         {
             get
             {
-                Vector2Int position = new Vector2Int(-boardSize.x / 2, -boardSize.y / 2);
-                return new RectInt(position, boardSize);
+                Vector2Int position = new Vector2Int(-BOARD_SIZE.x / 2, -BOARD_SIZE.y / 2);
+                return new RectInt(position, BOARD_SIZE);
             }
         }
         
@@ -46,9 +45,9 @@ namespace BoardManagementModule
             int random = Random.Range(0, _tetrominoes.Length);
             TetrominoData data = _tetrominoes[random];
         
-            _activePiece.Initialize(this, spawnPosition, data);
+            _activePiece.Initialize(_spawnPosition, data);
 
-            if (IsValidPosition(_activePiece, spawnPosition))
+            if (IsValidPosition(_activePiece, _spawnPosition))
             {
                 Set(_activePiece);
             }
@@ -105,18 +104,18 @@ namespace BoardManagementModule
 
         public void ClearLines()
         {
-            for (int index = -10; index < 10; index++)
+            for (int row = Bounds.yMin; row < Bounds.yMax; row++)
             {
-                if (IsLineFull(index))
+                if (IsLineFull(row))
                 {
-                    LineClear(index);
+                    LineClear(row);
                 }
             }
         }
 
         private bool IsLineFull(int row)
         {
-            for (int col = -5; col < 5; col++)
+            for (int col = Bounds.xMin; col < Bounds.xMax; col++)
             {
                 Vector2Int position = new Vector2Int(col, row);
                 if (!_tilemap.HasTile(position))
@@ -130,22 +129,24 @@ namespace BoardManagementModule
 
         private void LineClear(int row)
         {
-            for (int col = -5; col < 5; col++)
+            for (int col = Bounds.xMin; col < Bounds.xMax; col++)
             {
                 Vector2Int position = new Vector2Int(col, row);
                 _tilemap.SetTile(position, null);
             }
 
-            for (int rowIndex = row; rowIndex < 10; rowIndex++)
+            while (row < Bounds.yMax)
             {
-                for (int colIndex = -5; colIndex < 5; colIndex++)
+                for (int col = Bounds.xMin; col < Bounds.xMax; col++)
                 {
-                    Vector2Int position = new Vector2Int(colIndex, rowIndex + 1);
+                    Vector2Int position = new Vector2Int(col, row + 1);
                     TileBase above = _tilemap.GetTile(position);
 
-                    position = new Vector2Int(colIndex, rowIndex);
+                    position = new Vector2Int(col, row);
                     _tilemap.SetTile(position, above);
                 }
+
+                row++;
             }
         }
     }

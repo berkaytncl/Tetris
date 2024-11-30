@@ -2,6 +2,7 @@ using BoardManagementModule;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Zenject;
+using Utility;
 
 public class Ghost : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class Ghost : MonoBehaviour
         foreach (var t in _cells)
         {
             Vector2Int tilePosition = t + _position;
-            _tilemap.SetTile((Vector3Int)tilePosition, null);
+            _tilemap.SetTile(tilePosition, null);
         }
     }
 
@@ -56,7 +57,7 @@ public class Ghost : MonoBehaviour
         Vector2Int position = _piece.Position;
 
         int current = position.y;
-        int bottom = -_board.boardSize.y / 2 - 1;
+        int bottom = -_board.BOARD_SIZE.y / 2 - 1;
 
         _board.Clear(_piece);
 
@@ -82,7 +83,7 @@ public class Ghost : MonoBehaviour
         foreach (var t in _cells)
         {
             Vector2Int tilePosition = t + _position;
-            _tilemap.SetTile((Vector3Int)tilePosition, _ghostTile);
+            _tilemap.SetTile(tilePosition, _ghostTile);
         }
     }
 }

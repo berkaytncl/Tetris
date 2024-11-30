@@ -28,12 +28,10 @@ public class Piece : MonoBehaviour
     private float _moveTime;
     private float _lockTime;
 
-    public void Initialize(Board board, Vector2Int position, TetrominoData tetrominoData)
+    public void Initialize(Vector2Int position, TetrominoData tetrominoData)
     {
-        _board = board;
-        
         Position = position;
-
+        
         _tetrominoData = tetrominoData;
 
         _rotationIndex = 0;
