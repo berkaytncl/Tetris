@@ -16,18 +16,14 @@ namespace BoardManagementModule
         private readonly TetrominoData[] _tetrominoes;
         
         private readonly Vector2Int _spawnPosition = new Vector2Int(-1, 8);
-    
-        private RectInt Bounds
-        {
-            get
-            {
-                Vector2Int position = new Vector2Int(-BOARD_SIZE.x / 2, -BOARD_SIZE.y / 2);
-                return new RectInt(position, BOARD_SIZE);
-            }
-        }
+
+        private RectInt _bounds;
         
         public Board(Tilemap tilemap, Piece activePiece, TetrominoData[] tetrominoes)
         {
+            Vector2Int position = new Vector2Int(-BOARD_SIZE.x / 2, -BOARD_SIZE.y / 2);
+            _bounds =  new RectInt(position, BOARD_SIZE);
+            
             _tilemap = tilemap;
             _activePiece = activePiece;
             _tetrominoes = tetrominoes;
@@ -52,7 +48,7 @@ namespace BoardManagementModule
                 Set(_activePiece);
             }
             else
-            {
+            { 
                 GameOver();
             }
         }
@@ -82,13 +78,11 @@ namespace BoardManagementModule
 
         public bool IsValidPosition(Piece piece, Vector2Int position)
         {
-            RectInt bounds = Bounds;
-
             foreach (var t in piece.Cells)
             {
                 Vector2Int tilePosition = t + position;
 
-                if (!bounds.Contains(tilePosition))
+                if (!_bounds.Contains(tilePosition))
                 {
                     return false;
                 }
