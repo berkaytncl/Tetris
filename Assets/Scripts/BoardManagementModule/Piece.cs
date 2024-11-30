@@ -31,16 +31,25 @@ public class Piece : MonoBehaviour
     public void Initialize(Vector2Int position, TetrominoData tetrominoData)
     {
         Position = position;
-        
+
         _tetrominoData = tetrominoData;
 
         _rotationIndex = 0;
         _stepTime = Time.time + STEP_DELAY;
         _moveTime = Time.time + MOVE_DELAY;
         _lockTime = 0f;
+
+        TetrominoType tetrominoType = tetrominoData.tetrominoType;
         
-        _cells = BoardData.Cells[tetrominoData.tetrominoType];
-        _wallKicks = BoardData.WallKicks[tetrominoData.tetrominoType];
+        int cellLength = BoardData.Cells[tetrominoType].Length;
+        
+        _cells = new Vector2Int[cellLength];
+        _wallKicks = BoardData.WallKicks[tetrominoType];
+        
+        for (int index = 0; index < cellLength; index++)
+        {
+            _cells[index] = BoardData.Cells[tetrominoType][index];
+        }
     }
 
     private void Update()

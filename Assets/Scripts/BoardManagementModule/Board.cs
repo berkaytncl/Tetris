@@ -104,18 +104,22 @@ namespace BoardManagementModule
 
         public void ClearLines()
         {
-            for (int row = Bounds.yMin; row < Bounds.yMax; row++)
+            for (int row = -10; row < 10;)
             {
                 if (IsLineFull(row))
                 {
                     LineClear(row);
+                }
+                else
+                {
+                    row++;
                 }
             }
         }
 
         private bool IsLineFull(int row)
         {
-            for (int col = Bounds.xMin; col < Bounds.xMax; col++)
+            for (int col = -5; col < 5; col++)
             {
                 Vector2Int position = new Vector2Int(col, row);
                 if (!_tilemap.HasTile(position))
@@ -129,24 +133,22 @@ namespace BoardManagementModule
 
         private void LineClear(int row)
         {
-            for (int col = Bounds.xMin; col < Bounds.xMax; col++)
+            for (int col = -5; col < 5; col++)
             {
                 Vector2Int position = new Vector2Int(col, row);
                 _tilemap.SetTile(position, null);
             }
 
-            while (row < Bounds.yMax)
+            for (int rowIndex = row; rowIndex < 10; rowIndex++)
             {
-                for (int col = Bounds.xMin; col < Bounds.xMax; col++)
+                for (int col = -5; col < 5; col++)
                 {
-                    Vector2Int position = new Vector2Int(col, row + 1);
+                    Vector2Int position = new Vector2Int(col, rowIndex + 1);
                     TileBase above = _tilemap.GetTile(position);
 
-                    position = new Vector2Int(col, row);
+                    position = new Vector2Int(col, rowIndex);
                     _tilemap.SetTile(position, above);
                 }
-
-                row++;
             }
         }
     }
