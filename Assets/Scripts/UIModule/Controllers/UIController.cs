@@ -1,4 +1,7 @@
 using System;
+using BoardManagementModule;
+using GameManagementModule;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,28 +12,34 @@ namespace UIModule.Controllers
         public event Action ContinueButtonClickedEvent;
         public event Action QuitButtonClickedEvent;
         
-        private readonly GameObject _pauseMenu;
+        private readonly GameObject _menu;
 
-        private readonly Button _continueButton;
+        private readonly Button _playButton;
         private readonly Button _quitButton;
         
-        public UIController(GameObject pauseMenu, Button continueButton, Button quitButton)
+        private readonly TextMeshProUGUI _playText;
+        private readonly TextMeshProUGUI _scoreText;
+        
+        public UIController(GameObject menu, Button playGameButton, Button quitButton, TextMeshProUGUI scoreText)
         {
-            _pauseMenu = pauseMenu;
-            _continueButton = continueButton;
+            _menu = menu;
+            _playButton = playGameButton;
             _quitButton = quitButton;
+            _scoreText = scoreText;
+            
+            _playText = _playButton.GetComponentInChildren<TextMeshProUGUI>();
             
             ListenEvents();
         }
 
-        public void TogglePauseMenu(bool toggle)
+        private void MenuSetActive(bool isActive)
         {
-            _pauseMenu.SetActive(toggle);
+            _menu.SetActive(isActive);
         }
         
         private void ListenEvents()
         {
-            _continueButton.onClick.AddListener(() =>
+            _playButton.onClick.AddListener(() =>
             {
                 ContinueButtonClickedEvent?.Invoke();
             });
@@ -39,12 +48,43 @@ namespace UIModule.Controllers
             {
                 QuitButtonClickedEvent?.Invoke();
             });
+
+            GameController.OnGameStateChanged += HandleGameStateChange;
+            Board.ScoreChangeEvent += HandleScoreChange;
         }
 
+        private void HandleGameStateChange(GameState gameState)
+        {
+            switch (gameState)
+            {
+                case GameState.Playing:
+                    MenuSetActive(false);
+                    break;
+                
+                case GameState.Paused:
+                    _playText.text = "Continue";
+                    MenuSetActive(true);
+                    break;
+                
+                case GameState.Ready:
+                case GameState.GameOver:
+                    _playText.text = "Play";
+                    MenuSetActive(true);
+                    break;
+            }
+        }
+        
+        private void HandleScoreChange(int score)
+        {
+            _scoreText.text = "Score: " + score;
+        }
+        
         private void UnsubscribeFromEvents()
         {
-            _continueButton.onClick.RemoveAllListeners();
+            _playButton.onClick.RemoveAllListeners();
             _quitButton.onClick.RemoveAllListeners();
+            GameController.OnGameStateChanged -= HandleGameStateChange;
+            Board.ScoreChangeEvent -= HandleScoreChange;
         }
 
         public void Dispose()

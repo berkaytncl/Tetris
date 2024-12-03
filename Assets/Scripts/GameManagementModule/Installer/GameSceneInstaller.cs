@@ -1,3 +1,4 @@
+using TMPro;
 using UIModule.Controllers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,18 +9,21 @@ namespace GameManagementModule.Installer
     public class GameSceneInstaller : MonoInstaller
     {
         [SerializeField]
-        private GameObject _pauseMenu;
+        private GameObject _menu;
 
         [SerializeField]
-        private Button _continueButton;
+        private Button _playButton;
         [SerializeField]
         private Button _quitButton;
+        
+        [SerializeField]
+        private TextMeshProUGUI _scoreText;
         
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<UIController>().AsSingle().WithArguments(new object[]
             {
-                _pauseMenu, _continueButton, _quitButton
+                _menu, _playButton, _quitButton, _scoreText
             }).NonLazy();
         }
     }

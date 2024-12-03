@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
@@ -7,6 +8,10 @@ namespace BoardManagementModule
 {
     public class Board
     {
+        public static event Action<int> ScoreChangeEvent;
+        
+        public static event Action GameOverEvent;
+        
         public readonly Vector2Int BOARD_SIZE = new Vector2Int(10, 20);
 
         private readonly Tilemap _tilemap;
@@ -14,7 +19,9 @@ namespace BoardManagementModule
         private readonly Piece _activePiece;
     
         private readonly TetrominoData[] _tetrominoes;
-        
+
+        private int _currentScore;
+
         private readonly Vector2Int _spawnPosition = new Vector2Int(-1, 8);
 
         private RectInt _bounds;
@@ -27,7 +34,7 @@ namespace BoardManagementModule
             _tilemap = tilemap;
             _activePiece = activePiece;
             _tetrominoes = tetrominoes;
-        
+            
             SpawnPiece();
         }
 
@@ -56,6 +63,8 @@ namespace BoardManagementModule
         private void GameOver()
         {
             _tilemap.ClearAllTiles();
+            _currentScore = 0;
+            GameOverEvent?.Invoke();
         }
 
         public void Set(Piece piece)
@@ -103,6 +112,7 @@ namespace BoardManagementModule
                 if (IsLineFull(row))
                 {
                     LineClear(row);
+                    ScoreChangeEvent?.Invoke(_currentScore += 10);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 using System;
+using BoardManagementModule;
 using UIModule.Controllers;
 using UnityEngine;
 using Zenject;
@@ -9,7 +10,7 @@ namespace GameManagementModule
     {
         public static event Action<GameState> OnGameStateChanged;
 
-        private GameState _gameState;
+        private GameState _gameState = GameState.Ready;
 
         [Inject]
         private readonly UIController _uiController;
@@ -21,14 +22,15 @@ namespace GameManagementModule
         
         private void Start()
         {
-            _gameState = GameState.Ready;
             OnGameStateChanged?.Invoke(_gameState);
+            Time.timeScale = 0f;
         }
         
         private void ListenEvents()
         {
             _uiController.ContinueButtonClickedEvent += ContinueGame;
             _uiController.QuitButtonClickedEvent += QuitGame;
+            Board.GameOverEvent += HandleGameOver;
         }
         
         private void Update()
@@ -39,8 +41,7 @@ namespace GameManagementModule
                 {
                     ContinueGame();
                 }
-
-                if (_gameState == GameState.Playing)
+                else if (_gameState == GameState.Playing)
                 {
                     PauseGame();
                 }
@@ -49,20 +50,25 @@ namespace GameManagementModule
 
         private void ContinueGame()
         {
-            _uiController.TogglePauseMenu(false);
-            Time.timeScale = 1f;
             _gameState = GameState.Playing;
             OnGameStateChanged?.Invoke(_gameState);
+            Time.timeScale = 1f;
         }
 
         private void PauseGame()
         {
-            _uiController.TogglePauseMenu(true);
-            Time.timeScale = 0f;
             _gameState = GameState.Paused;
             OnGameStateChanged?.Invoke(_gameState);
+            Time.timeScale = 0f;
         }
 
+        private void HandleGameOver()
+        {
+            _gameState = GameState.GameOver;
+            OnGameStateChanged?.Invoke(_gameState);
+            Time.timeScale = 0f;
+        }
+        
         private void QuitGame()
         {
             Debug.Log("Quit");
@@ -73,6 +79,7 @@ namespace GameManagementModule
         {
             _uiController.ContinueButtonClickedEvent -= ContinueGame;
             _uiController.QuitButtonClickedEvent -= QuitGame;
+            Board.GameOverEvent -= HandleGameOver;
         }
 
         private void OnDestroy()
