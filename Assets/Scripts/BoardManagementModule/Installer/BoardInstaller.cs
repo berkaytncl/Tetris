@@ -17,7 +17,7 @@ namespace BoardManagementModule.Installer
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<Board>().AsSingle().WithArguments(new object[]
+            Container.BindInterfacesAndSelfTo<BoardController>().AsSingle().WithArguments(new object[]
             {
                 _boardTilemap, _trackingPiece, _tetrominoes
             }).NonLazy();

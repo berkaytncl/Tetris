@@ -66,7 +66,7 @@ namespace BoardManagementModule
         }
         
         [System.Serializable]
-        private class HighScoreData
+        private class HighScoreData  // -> Ayri bir class'a alalım.
         {
             public int highScore;
 

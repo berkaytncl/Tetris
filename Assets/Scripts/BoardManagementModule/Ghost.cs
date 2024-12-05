@@ -8,11 +8,14 @@ namespace BoardManagementModule
 {
     public class Ghost : MonoBehaviour
     {
-        [Inject] private Board _board;
+        [Inject] 
+        private BoardController _boardController;
+        
+        [SerializeField] 
+        private Tilemap _tilemap;
 
-        [SerializeField] private Tilemap _tilemap;
-
-        [SerializeField] private Tile _ghostTile;
+        [SerializeField] 
+        private Tile _ghostTile;
 
         private Piece _piece;
 
@@ -23,7 +26,7 @@ namespace BoardManagementModule
         private void Awake()
         {
             _cells = new Vector2Int[4];
-            _piece = _board.GetPiece();
+            _piece = _boardController.GetPiece();
         }
 
         private void LateUpdate()
@@ -56,15 +59,15 @@ namespace BoardManagementModule
             Vector2Int position = _piece.Position;
 
             int current = position.y;
-            int bottom = -_board.BOARD_SIZE.y / 2 - 1;
+            int bottom = -_boardController.BOARD_SIZE.y / 2 - 1;
 
-            _board.Clear(_piece);
+            _boardController.Clear(_piece);
 
             for (int row = current; row >= bottom; row--)
             {
                 position.y = row;
 
-                if (_board.IsValidPosition(_piece, position))
+                if (_boardController.IsValidPosition(_piece, position))
                 {
                     _position = position;
                 }
@@ -74,7 +77,7 @@ namespace BoardManagementModule
                 }
             }
 
-            _board.Set(_piece);
+            _boardController.Set(_piece);
         }
 
         private void Set()

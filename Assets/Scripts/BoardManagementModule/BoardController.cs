@@ -6,10 +6,10 @@ using Random = UnityEngine.Random;
 
 namespace BoardManagementModule
 {
-    public class Board
+    public class BoardController
     {
-        public static event Action<int> UpdateScoreEvent;
-        public static event Action GameOverEvent;
+        public event Action<int> UpdateScoreEvent;
+        public event Action GameOverEvent; 
         
         public readonly Vector2Int BOARD_SIZE = new Vector2Int(10, 20);
 
@@ -23,7 +23,7 @@ namespace BoardManagementModule
 
         private RectInt _bounds;
 
-        public Board(Tilemap tilemap, Piece activePiece, TetrominoData[] tetrominoes)
+        public BoardController(Tilemap tilemap, Piece activePiece, TetrominoData[] tetrominoes)
         {
             Vector2Int position = new Vector2Int(-BOARD_SIZE.x / 2, -BOARD_SIZE.y / 2);
             _bounds = new RectInt(position, BOARD_SIZE);

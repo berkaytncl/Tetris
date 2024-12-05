@@ -6,7 +6,7 @@ namespace BoardManagementModule
 {
     public class Piece : MonoBehaviour
     {
-        [Inject] private Board _board;
+        [Inject] private BoardController _boardController;
 
         private Vector2Int[] _cells;
 
@@ -27,7 +27,7 @@ namespace BoardManagementModule
         private float _stepTime;
         private float _moveTime;
         private float _lockTime;
-
+        
         public void Initialize(Vector2Int position, TetrominoData tetrominoData)
         {
             Position = position;
@@ -54,7 +54,7 @@ namespace BoardManagementModule
 
         private void Update()
         {
-            _board.Clear(this);
+            _boardController.Clear(this);
 
             _lockTime += Time.deltaTime;
 
@@ -83,7 +83,7 @@ namespace BoardManagementModule
                 Step();
             }
 
-            _board.Set(this);
+            _boardController.Set(this);
         }
 
         private void HandleMoveInputs()
@@ -130,9 +130,9 @@ namespace BoardManagementModule
 
         private void Lock()
         {
-            _board.Set(this);
-            _board.ClearLines();
-            _board.SpawnPiece();
+            _boardController.Set(this);
+            _boardController.ClearLines();
+            _boardController.SpawnPiece();
         }
 
         private bool Move(Vector2Int translation)
@@ -141,7 +141,7 @@ namespace BoardManagementModule
             newPosition.x += translation.x;
             newPosition.y += translation.y;
 
-            bool valid = _board.IsValidPosition(this, newPosition);
+            bool valid = _boardController.IsValidPosition(this, newPosition);
 
             if (valid)
             {

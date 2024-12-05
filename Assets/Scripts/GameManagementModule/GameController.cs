@@ -12,6 +12,9 @@ namespace GameManagementModule
         public static event Action<int> ScoreChangeEvent;
 
         [Inject]
+        private readonly BoardController _boardController;
+
+        [Inject]
         private readonly UIController _uiController;
         
         private HighScoreManager _highScoreManager;
@@ -38,8 +41,9 @@ namespace GameManagementModule
             _uiController.ContinueButtonClickedEvent += ContinueGame;
             _uiController.QuitButtonClickedEvent += QuitGame;
             _uiController.MenuButtonClickedEvent += ReturnMenu;
-            Board.UpdateScoreEvent += HandleUpdateScore;
-            Board.GameOverEvent += HandleGameOver;
+            
+            _boardController.UpdateScoreEvent += HandleUpdateScore;
+            _boardController.GameOverEvent += HandleGameOver;
         }
         
         private void Update()
@@ -106,8 +110,8 @@ namespace GameManagementModule
         {
             _uiController.ContinueButtonClickedEvent -= ContinueGame;
             _uiController.QuitButtonClickedEvent -= QuitGame;
-            Board.UpdateScoreEvent -= HandleUpdateScore;
-            Board.GameOverEvent -= HandleGameOver;
+            _boardController.UpdateScoreEvent -= HandleUpdateScore;
+            _boardController.GameOverEvent -= HandleGameOver;
         }
 
         private void OnDestroy()
