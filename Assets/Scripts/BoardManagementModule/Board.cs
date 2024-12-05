@@ -8,8 +8,7 @@ namespace BoardManagementModule
 {
     public class Board
     {
-        public static event Action<int> ScoreChangeEvent;
-        
+        public static event Action<int> UpdateScoreEvent;
         public static event Action GameOverEvent;
         
         public readonly Vector2Int BOARD_SIZE = new Vector2Int(10, 20);
@@ -20,21 +19,19 @@ namespace BoardManagementModule
     
         private readonly TetrominoData[] _tetrominoes;
 
-        private int _currentScore;
-
         private readonly Vector2Int _spawnPosition = new Vector2Int(-1, 8);
 
         private RectInt _bounds;
-        
+
         public Board(Tilemap tilemap, Piece activePiece, TetrominoData[] tetrominoes)
         {
             Vector2Int position = new Vector2Int(-BOARD_SIZE.x / 2, -BOARD_SIZE.y / 2);
-            _bounds =  new RectInt(position, BOARD_SIZE);
-            
+            _bounds = new RectInt(position, BOARD_SIZE);
+
             _tilemap = tilemap;
             _activePiece = activePiece;
             _tetrominoes = tetrominoes;
-            
+
             SpawnPiece();
         }
 
@@ -63,7 +60,6 @@ namespace BoardManagementModule
         private void GameOver()
         {
             _tilemap.ClearAllTiles();
-            _currentScore = 0;
             GameOverEvent?.Invoke();
         }
 
@@ -107,17 +103,24 @@ namespace BoardManagementModule
 
         public void ClearLines()
         {
+            int clearedLines = 0;
+            
             for (int row = -10; row < 10;)
             {
                 if (IsLineFull(row))
                 {
                     LineClear(row);
-                    ScoreChangeEvent?.Invoke(_currentScore += 10);
+                    clearedLines++;
                 }
                 else
                 {
                     row++;
                 }
+            }
+            
+            if (clearedLines > 0)
+            {
+                UpdateScoreEvent?.Invoke(clearedLines * 10);
             }
         }
 

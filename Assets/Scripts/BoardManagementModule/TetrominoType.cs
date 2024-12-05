@@ -1,13 +1,22 @@
 using UnityEngine.Tilemaps;
 
-public enum TetrominoType
+namespace BoardManagementModule
 {
-    I, J, L, O, S, T, Z
-}
+    public enum TetrominoType
+    {
+        I,
+        J,
+        L,
+        O,
+        S,
+        T,
+        Z
+    }
 
-[System.Serializable]
-public struct TetrominoData
-{
-    public Tile tile;
-    public TetrominoType tetrominoType;
+    [System.Serializable]
+    public struct TetrominoData
+    {
+        public Tile tile;
+        public TetrominoType tetrominoType;
+    }
 }

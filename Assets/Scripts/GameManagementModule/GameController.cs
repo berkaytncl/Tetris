@@ -9,15 +9,22 @@ namespace GameManagementModule
     public class GameController : MonoBehaviour
     {
         public static event Action<GameState> OnGameStateChanged;
-
-        private GameState _gameState = GameState.Ready;
+        public static event Action<int> ScoreChangeEvent;
 
         [Inject]
         private readonly UIController _uiController;
         
+        private HighScoreManager _highScoreManager;
+        
+        private GameState _gameState = GameState.Ready;
+        
+        private int _currentScore;
+        
         private void Awake()
         {
             ListenEvents();
+            
+            _highScoreManager = new HighScoreManager();
         }
         
         private void Start()
@@ -30,6 +37,8 @@ namespace GameManagementModule
         {
             _uiController.ContinueButtonClickedEvent += ContinueGame;
             _uiController.QuitButtonClickedEvent += QuitGame;
+            _uiController.MenuButtonClickedEvent += ReturnMenu;
+            Board.UpdateScoreEvent += HandleUpdateScore;
             Board.GameOverEvent += HandleGameOver;
         }
         
@@ -47,6 +56,18 @@ namespace GameManagementModule
                 }
             }
         }
+        
+        private void HandleUpdateScore(int score)
+        {
+            _currentScore += score;
+            ScoreChangeEvent?.Invoke(_currentScore);
+        }
+
+        private void ResetScore()
+        {
+            _currentScore = 0;
+            ScoreChangeEvent?.Invoke(_currentScore);
+        }
 
         private void ContinueGame()
         {
@@ -62,6 +83,13 @@ namespace GameManagementModule
             Time.timeScale = 0f;
         }
 
+        private void ReturnMenu()
+        {
+            _gameState = GameState.Ready;
+            OnGameStateChanged?.Invoke(_gameState);
+            ResetScore();
+        }
+        
         private void HandleGameOver()
         {
             _gameState = GameState.GameOver;
@@ -71,7 +99,6 @@ namespace GameManagementModule
         
         private void QuitGame()
         {
-            Debug.Log("Quit");
             Application.Quit();
         }
 
@@ -79,6 +106,7 @@ namespace GameManagementModule
         {
             _uiController.ContinueButtonClickedEvent -= ContinueGame;
             _uiController.QuitButtonClickedEvent -= QuitGame;
+            Board.UpdateScoreEvent -= HandleUpdateScore;
             Board.GameOverEvent -= HandleGameOver;
         }
 
