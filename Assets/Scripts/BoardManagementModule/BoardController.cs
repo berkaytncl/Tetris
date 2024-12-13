@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Utility;
+using Utility.Helpers;
 using Random = UnityEngine.Random;
 
 namespace BoardManagementModule

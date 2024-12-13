@@ -2,6 +2,7 @@ using System;
 using BoardManagementModule;
 using UIModule.Controllers;
 using UnityEngine;
+using Utility.Managers;
 using Zenject;
 
 namespace GameManagementModule
@@ -9,7 +10,6 @@ namespace GameManagementModule
     public class GameController : MonoBehaviour
     {
         public static event Action<GameState> OnGameStateChanged;
-        public static event Action<int> ScoreChangeEvent;
 
         [Inject]
         private readonly BoardController _boardController;
@@ -17,22 +17,18 @@ namespace GameManagementModule
         [Inject]
         private readonly UIController _uiController;
         
-        private HighScoreManager _highScoreManager;
-        
-        private GameState _gameState = GameState.Ready;
-        
-        private int _currentScore;
+        private ScoreManager _scoreManager;
         
         private void Awake()
         {
             ListenEvents();
             
-            _highScoreManager = new HighScoreManager();
+            _scoreManager = new ScoreManager();
         }
         
         private void Start()
         {
-            OnGameStateChanged?.Invoke(_gameState);
+            OnGameStateChanged?.Invoke(_scoreManager.GameData.GameState);
             Time.timeScale = 0f;
         }
         
@@ -50,11 +46,11 @@ namespace GameManagementModule
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (_gameState == GameState.Paused)
+                if (_scoreManager.GameData.GameState == GameState.Paused)
                 {
                     ContinueGame();
                 }
-                else if (_gameState == GameState.Playing)
+                else if (_scoreManager.GameData.GameState == GameState.Playing)
                 {
                     PauseGame();
                 }
@@ -63,41 +59,33 @@ namespace GameManagementModule
         
         private void HandleUpdateScore(int score)
         {
-            _currentScore += score;
-            ScoreChangeEvent?.Invoke(_currentScore);
-        }
-
-        private void ResetScore()
-        {
-            _currentScore = 0;
-            ScoreChangeEvent?.Invoke(_currentScore);
+            _scoreManager.AddToCurrentScore(score);
         }
 
         private void ContinueGame()
         {
-            _gameState = GameState.Playing;
-            OnGameStateChanged?.Invoke(_gameState);
+            _scoreManager.GameData.GameState = GameState.Playing;
+            OnGameStateChanged?.Invoke(_scoreManager.GameData.GameState);
             Time.timeScale = 1f;
         }
 
         private void PauseGame()
         {
-            _gameState = GameState.Paused;
-            OnGameStateChanged?.Invoke(_gameState);
+            _scoreManager.GameData.GameState = GameState.Paused;
+            OnGameStateChanged?.Invoke(_scoreManager.GameData.GameState);
             Time.timeScale = 0f;
         }
 
         private void ReturnMenu()
         {
-            _gameState = GameState.Ready;
-            OnGameStateChanged?.Invoke(_gameState);
-            ResetScore();
+            _scoreManager.NewGame();
+            OnGameStateChanged?.Invoke(_scoreManager.GameData.GameState);
         }
         
         private void HandleGameOver()
         {
-            _gameState = GameState.GameOver;
-            OnGameStateChanged?.Invoke(_gameState);
+            _scoreManager.GameData.GameState = GameState.GameOver;
+            OnGameStateChanged?.Invoke(_scoreManager.GameData.GameState);
             Time.timeScale = 0f;
         }
         
@@ -110,6 +98,8 @@ namespace GameManagementModule
         {
             _uiController.ContinueButtonClickedEvent -= ContinueGame;
             _uiController.QuitButtonClickedEvent -= QuitGame;
+            _uiController.MenuButtonClickedEvent -= ReturnMenu;
+            
             _boardController.UpdateScoreEvent -= HandleUpdateScore;
             _boardController.GameOverEvent -= HandleGameOver;
         }

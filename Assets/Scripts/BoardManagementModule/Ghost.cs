@@ -1,8 +1,7 @@
-using BoardManagementModule;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Zenject;
-using Utility;
+using Utility.Helpers;
 
 namespace BoardManagementModule
 {

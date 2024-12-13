@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Utility
+namespace Utility.Helpers
 {
     public static class TilemapHelper
     {

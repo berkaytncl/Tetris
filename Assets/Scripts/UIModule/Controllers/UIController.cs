@@ -1,9 +1,12 @@
 using System;
-using BoardManagementModule;
+using System.Collections.Generic;
+using System.Linq;
 using GameManagementModule;
+using Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility.Managers;
 
 namespace UIModule.Controllers
 {
@@ -74,8 +77,8 @@ namespace UIModule.Controllers
             });
 
             GameController.OnGameStateChanged += HandleGameStateChange;
-            GameController.ScoreChangeEvent += HandleScoreChange;
-            HighScoreManager.HighScoreChangeEvent += HandleHighScoreChange;
+            ScoreManager.ScoreChangeEvent += HandleScoreChange;
+            ScoreManager.TopScoresChangeEvent += HandleTopScoresChange;
         }
 
         private void HandleGameStateChange(GameState gameState)
@@ -112,10 +115,14 @@ namespace UIModule.Controllers
             _menuScoreText.text = "Score: " + score;
         }
 
-        private void HandleHighScoreChange(int highScore)
+        private void HandleTopScoresChange(List<TopScoresData> topScores)
         {
-            _highestScoreText.text = "High Score: " + highScore;
-            _menuHighestScoreText.text = "High Score: " + highScore;
+            if (topScores == null || topScores.Count == 0) return;
+            
+            int highestScore = topScores.Max(scoreData => scoreData.Score);
+            
+            _highestScoreText.text = "High Score: " + highestScore;
+            _menuHighestScoreText.text = "High Score: " + highestScore;
         }
         
         private void UnsubscribeFromEvents()
@@ -124,8 +131,8 @@ namespace UIModule.Controllers
             _quitButton.onClick.RemoveAllListeners();
             _menuButton.onClick.RemoveAllListeners();
             GameController.OnGameStateChanged -= HandleGameStateChange;
-            GameController.ScoreChangeEvent -= HandleScoreChange;
-            HighScoreManager.HighScoreChangeEvent -= HandleHighScoreChange;
+            ScoreManager.ScoreChangeEvent -= HandleScoreChange;
+            ScoreManager.TopScoresChangeEvent -= HandleTopScoresChange;
         }
 
         public void Dispose()
